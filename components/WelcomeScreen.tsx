@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Image } from 'react-native';
-import SocialIcons from './SocialIcons';
-import MobileSignInScreen from './MobileSignInScreen';
+import { NavigationProp } from '@react-navigation/native';
 
-const WelcomeScreen = () => {
+type WelcomeScreenProps = {
+  navigation: NavigationProp<any>; 
+};
+
+const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
   const [step, setStep] = useState(0);
 
   const steps = [
@@ -24,19 +27,21 @@ const WelcomeScreen = () => {
       welcomeText: 'Get Started',
       appName: 'Join KredPay Now',
       subtitle: 'Sign up today and enjoy exclusive benefits!',
-    }
+    },
   ];
 
   const handleNext = () => {
     setStep((prevStep) => (prevStep + 1) % steps.length);
   };
-  return (
-    <MobileSignInScreen/>
-  );
+
+  const handleSignIn = () => {
+    navigation.navigate('PhoneNumberForm'); // Navigate to PhoneNumberForm
+  };
 
   return (
     <View style={styles.mainContainer}>
-      {/* Dashes Line - Only Show When step < 2 */}
+      <Image source={require('../assets/load.jpg')} style={styles.logoImage} />
+
       {step < 2 && (
         <View style={styles.dashContainer}>
           {steps.map((_, index) => (
@@ -45,43 +50,34 @@ const WelcomeScreen = () => {
         </View>
       )}
 
-      {/* Small Image Below Dashes */}
-      <Image source={require('../assets/load.jpg')} style={styles.logoImage} />
-
-      {/* Background Image with Content */}
       <ImageBackground source={steps[step].image} style={styles.container}>
         <View style={styles.contentContainer}>
-          {/* Show welcome text only when step < 2 */}
           {step < 2 ? (
             <>
               <Text style={styles.welcomeText}>{steps[step].welcomeText}</Text>
               <Text style={styles.appName}>{steps[step].appName}</Text>
               <Text style={styles.subtitle}>{steps[step].subtitle}</Text>
-
-              {/* Continue Button */}
               <TouchableOpacity style={styles.button} onPress={handleNext}>
                 <Text style={styles.buttonText}>Continue</Text>
               </TouchableOpacity>
             </>
           ) : (
             <>
-            <TouchableOpacity style={styles.button} onPress={handleNext}>
+              <TouchableOpacity style={styles.button} onPress={handleSignIn}>
                 <Text style={styles.buttonText}>Sign In using Mobile</Text>
               </TouchableOpacity>
-              {/* Sign Up Options */}
               <TouchableOpacity style={styles.button} onPress={handleNext}>
-                <Text style={styles.buttonText}><Image source={require('../assets/google.png')} style={styles.icon} /> Sign Up Using Google</Text>
+                <Text style={styles.buttonText}>
+                  <Image source={require('../assets/google.png')} style={styles.icon} /> Sign Up Using Google
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.button} onPress={handleNext}>
-                <Text style={styles.buttonText}><Image source={require('../assets/Apple_logo_black.png')} style={styles.icon} /> Sign Up Using Apple ID</Text>
+                <Text style={styles.buttonText}>
+                  <Image source={require('../assets/Apple_logo_black.png')} style={styles.icon} /> Sign Up Using Apple ID
+                </Text>
               </TouchableOpacity>
-
-              {/* OR Divider */}
               <Text style={styles.orText}>------------- OR -------------</Text>
-
-              {/* Social Media Icons */}
               <View style={styles.iconContainer}>
-                {/* <SocialIcons /> */}
                 <Image source={require('../assets/google.png')} style={styles.icon} />
                 <Image source={require('../assets/twitter.png')} style={styles.icon} />
                 <Image source={require('../assets/facebook.png')} style={styles.icon} />
@@ -143,9 +139,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
-    // borderColor: 'green',
-    // borderWidth: 2,
-    
   },
   contentContainer: {
     width: '100%',

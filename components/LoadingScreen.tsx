@@ -1,33 +1,32 @@
-import React from 'react';
-import { View, Image, StyleSheet, Dimensions } from 'react-native';
-const { width, height } = Dimensions.get('window');
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 
+const LoadingScreen = ({ navigation }: any) => {
+  useEffect(() => {
+    setTimeout(() => {
+      navigation.replace('WelcomeScreen'); // Navigate to WelcomeScreen
+    }, 2000);
+  }, [navigation]);
 
-
-const LoadingScreen = () => {
   return (
     <View style={styles.container}>
-      <Image 
-        source={require('../assets/load.jpg')}  // Make sure this path is correct
-        style={styles.logoImage} 
-      />
+      <Text style={styles.text}>Loading...</Text>
+      <ActivityIndicator size="large" color="green" />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
-    width: width, // Full screen width
-    height: height, // Full screen height
-    justifyContent: 'center', // Center vertically
-    alignItems: 'center',  // Center horizontally
-    backgroundColor: '#fff', // Optional background color
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
   },
-  logoImage: {
-    width: 250,  // Adjust width for better visibility
-    height: 250, // Adjust height for better visibility
-    resizeMode: 'contain', // Ensures the image fits properly
+  text: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
   },
 });
 
